@@ -7,9 +7,17 @@
 #include <vector>
 #include <memory>
 
+#include "vectormath_cpp/vectormath_aos.h"
+#include "GameAsset.h"
+#include "Camera.h"
+
 using namespace std;
 
 #define RUN_GRAPHICS_DISPLAY 0x00;
+
+vector<shared_ptr<GameAsset> > assets;
+
+bool horrible_global_go = false;
 
 SDL_Window * window = nullptr;
 
@@ -35,7 +43,10 @@ void display() {
 
   // This O(n + n^2 + n) sequence of loops is written for clarity,
   // not efficiency
-/*
+  for(auto it : assets) {
+    if(horrible_global_go) {it->update();}
+  }
+
   for(auto i : assets) {
     for(auto j : assets) {
       if((i != j) && i->collidesWith(*j)) {
@@ -47,7 +58,7 @@ void display() {
   for(auto it : assets) {
     it->draw();
   }
-  */
+  
   // Don't forget to swap the buffers
   SDL_GL_SwapWindow(window);
 }
@@ -88,6 +99,11 @@ int main(int argc, char ** argv) {
 	  cerr<< "OpenGL 2.0 not available" << endl;
 	  return 1;
 	}
+	//load the objects
+	//need a cube (player) and squares which he can go through
+
+
+
 
 
 	// Set the camera
@@ -102,5 +118,37 @@ int main(int argc, char ** argv) {
 	// Add the main event loop
 	SDL_Event event;
 	while (SDL_WaitEvent(&event)) {
+			switch (event.type) {
+			case SDL_QUIT:
+			  SDL_Quit();
+			  break;
+			case SDL_USEREVENT:
+			  display();
+			  break;
+			case SDL_KEYUP:
+			  //			  Camera::getInstance().setCamera(Matrix4::identity());
+			  break;
+			case SDL_KEYDOWN:
+			  Matrix4 camera = Camera::getInstance().getCameraM();
+			  switch(event.key.keysym.sym){
+			  case SDLK_LEFT:
+			    Camera::getInstance().setCamera((camera * Matrix4::rotationY(5.0/180.0)));
+			    break;
+			  case SDLK_RIGHT:
+			    Camera::getInstance().setCamera(camera * Matrix4::rotationY(-5.0/180.0) );
+			    break;
+			  case SDLK_UP:
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.0, -1.0)) );
+			    break;
+			  case SDLK_DOWN:
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.0, 1.0)) );
+			    break;
+			  case SDLK_g:
+			    horrible_global_go = true;
+			  default:
+			    break;
+			  }
+			  break;
+			}
 	}
 }
