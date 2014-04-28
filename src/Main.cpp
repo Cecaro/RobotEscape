@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "CubeAsset.h"
 #include "Player.h"
+#include "BoundingBox.h"
 
 using namespace std;
 
@@ -78,7 +79,7 @@ int main(int argc, char ** argv) {
 	atexit(SDL_Quit);
 
 	// Create a new window with an OpenGL surface
-	window = SDL_CreateWindow("CI224 - Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+	window = SDL_CreateWindow("Robot Escape", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	if (nullptr == window) {
 			cout << "Failed to create SDL window: " << SDL_GetError() << endl;
 			SDL_Quit();
@@ -103,11 +104,11 @@ int main(int argc, char ** argv) {
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
 	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
-
+	assets.push_back(shared_ptr<CubeAsset> (new CubeAsset(0, 0, 10)));
 
 	// Set the camera
 	//Camera::getInstance().lookAt(Point3(0.0, 0.0, -10.0), Point3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0));
-	    Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, 5.0)));
+	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -2.0, 5.0)));
 		display();
 	//Camera::getInstance().setCamera(Matrix4::identity());
 
@@ -125,7 +126,7 @@ int main(int argc, char ** argv) {
 			  display();
 			  break;
 			case SDL_KEYUP:
-			  //			  Camera::getInstance().setCamera(Matrix4::identity());
+			  // Camera::getInstance().setCamera(Matrix4::identity());
 			  break;
 			case SDL_KEYDOWN:
 			  Matrix4 camera = Camera::getInstance().getCameraM();
@@ -139,11 +140,11 @@ int main(int argc, char ** argv) {
 			    player->MoveRight();
 			    break;
 			  case SDLK_UP:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.5, 0.0)) );
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, -0.5, 0.0)) );
 			    player->MoveUp();
 			    break;
 			  case SDLK_DOWN:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, -0.5, 0.0)) );
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.5, 0.0)) );
 			    player->MoveDown();
 			    break;
 			  default:

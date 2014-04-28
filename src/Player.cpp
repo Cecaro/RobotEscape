@@ -55,21 +55,22 @@ R2, F1, F0
 Player::~Player() {
 }
 
+//Player Movement
 void Player::MoveLeft() {
     shared_ptr<Point3> MvL = this->bbox->getCentre();
-    *MvL = Point3((MvL->getX()) - 0.5, 0.0, 0.0);
+    *MvL = Point3((MvL->getX() - 0.5), MvL->getY(), MvL->getZ());
 }
 void Player::MoveRight() {
   shared_ptr<Point3> MvR = this->bbox->getCentre();
-    *MvR = Point3(MvR->getX() + 0.5, 0.0, 0.0);
+    *MvR = Point3((MvR->getX() + 0.5), MvR->getY(), MvR->getZ());
 }  
 void Player::MoveUp() {
   shared_ptr<Point3> MvU = this->bbox->getCentre();
-    *MvU = Point3(MvU->getX() + 0.0, 0.5, 0.0);
+    *MvU = Point3( MvU->getX(), (MvU-> getY() + 0.5), MvU->getZ());
 }
 void Player::MoveDown() {
   shared_ptr<Point3> MvD = this->bbox->getCentre();
-    *MvD = Point3(MvD->getX() - 0.0, 0.5, 0.0);
+    *MvD = Point3(MvD->getX(), (MvD->getY() - 0.5), MvD->getZ());
 }
 
 void Player::update() {
