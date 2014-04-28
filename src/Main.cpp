@@ -100,14 +100,16 @@ int main(int argc, char ** argv) {
 	}
 
 	//load the objects
-	//need a cube (player) and squares which he can go through
+	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
+	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
+
 
 	// Set the camera
-	Camera::getInstance().lookAt(Point3(0.0, 0.0, -10.0), Point3(0.0, 0.0, -1.0), Vector3(0.0, 1.0, 0.0));
-	    Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(-10.0, 0.0, 20.0)));
+	//Camera::getInstance().lookAt(Point3(0.0, 0.0, -10.0), Point3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0));
+	    Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, 5.0)));
 		display();
-	Camera::getInstance().setCamera(Matrix4::identity());
+	//Camera::getInstance().setCamera(Matrix4::identity());
 
 	// Call the function "display" every delay milliseconds
 	SDL_AddTimer(delay, display, NULL);
@@ -129,17 +131,20 @@ int main(int argc, char ** argv) {
 			  Matrix4 camera = Camera::getInstance().getCameraM();
 			  switch(event.key.keysym.sym){
 			  case SDLK_LEFT:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(-0.5, 0.0, 0.0)) );
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.5, 0.0, 0.0)) );
 			    player->MoveLeft();
 			    break;
 			  case SDLK_RIGHT:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(1.0, 0.0, 0.0)) );
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(-0.5, 0.0, 0.0)) );
+			    player->MoveRight();
 			    break;
 			  case SDLK_UP:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.0, -1.0)) );
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.5, 0.0)) );
+			    player->MoveUp();
 			    break;
 			  case SDLK_DOWN:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.0, 1.0)) );
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, -0.5, 0.0)) );
+			    player->MoveDown();
 			    break;
 			  default:
 			    break;

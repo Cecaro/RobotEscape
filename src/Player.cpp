@@ -61,15 +61,15 @@ void Player::MoveLeft() {
 }
 void Player::MoveRight() {
   shared_ptr<Point3> MvR = this->bbox->getCentre();
-    *MvR = Point3(MvR->getX() - 0.5, 0.0, 0.0);
+    *MvR = Point3(MvR->getX() + 0.5, 0.0, 0.0);
 }  
 void Player::MoveUp() {
   shared_ptr<Point3> MvU = this->bbox->getCentre();
-    *MvU = Point3(MvU->getX() - 0.5, 0.0, 0.0);
+    *MvU = Point3(MvU->getX() + 0.0, 0.5, 0.0);
 }
 void Player::MoveDown() {
   shared_ptr<Point3> MvD = this->bbox->getCentre();
-    *MvD = Point3(MvD->getX() - 0.5, 0.0, 0.0);
+    *MvD = Point3(MvD->getX() - 0.0, 0.5, 0.0);
 }
 
 void Player::update() {
