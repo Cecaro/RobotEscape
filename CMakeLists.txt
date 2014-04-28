@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project("RobotEscape")
 
 #set the source files and path 
-set(SOURCES src/Main.cpp src/Camera.cpp src/Camera.h src/BoundingBox.cpp src/BoundingBox.h src/GameAsset.cpp src/GameAsset.h src/CubeAsset.h src/CubeAsset.cpp)
+set(SOURCES src/Main.cpp src/Camera.cpp src/Camera.h src/BoundingBox.cpp src/BoundingBox.h src/GameAsset.cpp src/GameAsset.h src/CubeAsset.h src/CubeAsset.cpp src/Player.h src/Player.cpp)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/Modules)
 
 

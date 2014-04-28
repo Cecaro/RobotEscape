@@ -1,0 +1,7 @@
+-#Files which are not needed for build/are produced by it
+
+CMakeFiles/
+cmake_install.cmake
+Makefile
+RobotEscape
+CMakeCache.txt 

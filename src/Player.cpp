@@ -1,11 +1,11 @@
-#include "CubeAsset.h"
+#include "Player.h"
 
-CubeAsset::CubeAsset(): GameAsset()
+Player::Player(): GameAsset()
 {
-  CubeAsset(0, 0, 0);
+  Player(0, 0, 0);
 }
 
-CubeAsset::CubeAsset(float x, float y, float z) {
+Player::Player(float x, float y, float z) {
   //this->li = nullptr;
 
   // A default unit cube
@@ -52,15 +52,31 @@ R2, F1, F0
   make_resources();
 }
 
-CubeAsset::~CubeAsset() {
-  // TODO: do something nice and fun here.
+Player::~Player() {
 }
 
-void CubeAsset::update() {
+void Player::MoveLeft() {
+    shared_ptr<Point3> MvL = this->bbox->getCentre();
+    *MvL = Point3((MvL->getX()) - 0.5, 0.0, 0.0);
+}
+void Player::MoveRight() {
+  shared_ptr<Point3> MvR = this->bbox->getCentre();
+    *MvR = Point3(MvR->getX() - 0.5, 0.0, 0.0);
+}  
+void Player::MoveUp() {
+  shared_ptr<Point3> MvU = this->bbox->getCentre();
+    *MvU = Point3(MvU->getX() - 0.5, 0.0, 0.0);
+}
+void Player::MoveDown() {
+  shared_ptr<Point3> MvD = this->bbox->getCentre();
+    *MvD = Point3(MvD->getX() - 0.5, 0.0, 0.0);
 }
 
-void CubeAsset::draw() {
+void Player::update() {
+}
+
+void Player::draw() {
   GameAsset::draw();
 }
 
-void CubeAsset::clean() { } 
+void Player::clean() { } 

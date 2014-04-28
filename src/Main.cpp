@@ -10,14 +10,15 @@
 #include "vectormath_cpp/vectormath_aos.h"
 #include "GameAsset.h"
 #include "Camera.h"
+#include "CubeAsset.h"
+#include "Player.h"
 
 using namespace std;
 
 #define RUN_GRAPHICS_DISPLAY 0x00;
 
 vector<shared_ptr<GameAsset> > assets;
-
-bool horrible_global_go = false;
+shared_ptr<Player> player;
 
 SDL_Window * window = nullptr;
 
@@ -43,9 +44,6 @@ void display() {
 
   // This O(n + n^2 + n) sequence of loops is written for clarity,
   // not efficiency
-  for(auto it : assets) {
-    if(horrible_global_go) {it->update();}
-  }
 
   for(auto i : assets) {
     for(auto j : assets) {
@@ -58,6 +56,7 @@ void display() {
   for(auto it : assets) {
     it->draw();
   }
+  player->draw();
   
   // Don't forget to swap the buffers
   SDL_GL_SwapWindow(window);
@@ -99,18 +98,16 @@ int main(int argc, char ** argv) {
 	  cerr<< "OpenGL 2.0 not available" << endl;
 	  return 1;
 	}
+
 	//load the objects
 	//need a cube (player) and squares which he can go through
-
-
-
-
+	player = shared_ptr<Player> (new Player(0, 0, 0));
 
 	// Set the camera
-	//Camera::getInstance().lookAt(Point3(0.0, 0.0, -10.0), Point3(0.0, 0.0, -1.0), Vector3(0.0, 1.0, 0.0));
-	//  Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(-10.0, 0.0, 20.0)));
-	//	display();
-	//	Camera::getInstance().setCamera(Matrix4::identity());
+	Camera::getInstance().lookAt(Point3(0.0, 0.0, -10.0), Point3(0.0, 0.0, -1.0), Vector3(0.0, 1.0, 0.0));
+	    Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(-10.0, 0.0, 20.0)));
+		display();
+	Camera::getInstance().setCamera(Matrix4::identity());
 
 	// Call the function "display" every delay milliseconds
 	SDL_AddTimer(delay, display, NULL);
@@ -132,10 +129,11 @@ int main(int argc, char ** argv) {
 			  Matrix4 camera = Camera::getInstance().getCameraM();
 			  switch(event.key.keysym.sym){
 			  case SDLK_LEFT:
-			    Camera::getInstance().setCamera((camera * Matrix4::rotationY(5.0/180.0)));
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(-0.5, 0.0, 0.0)) );
+			    player->MoveLeft();
 			    break;
 			  case SDLK_RIGHT:
-			    Camera::getInstance().setCamera(camera * Matrix4::rotationY(-5.0/180.0) );
+			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(1.0, 0.0, 0.0)) );
 			    break;
 			  case SDLK_UP:
 			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.0, -1.0)) );
@@ -143,8 +141,6 @@ int main(int argc, char ** argv) {
 			  case SDLK_DOWN:
 			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.0, 1.0)) );
 			    break;
-			  case SDLK_g:
-			    horrible_global_go = true;
 			  default:
 			    break;
 			  }

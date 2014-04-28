@@ -12,12 +12,12 @@
 #include <fstream>
 #include <memory>
 
-//#include "vectormath_cpp/vectormath_aos.h"
+#include "vectormath_cpp/vectormath_aos.h"
 #include "Camera.h"
 #include "BoundingBox.h"
 
 using namespace std;
-//using namespace Vectormath::Aos;
+using namespace Vectormath::Aos;
 
 #ifndef GAMEASSET_H_
 #define GAMEASSET_H_
