@@ -29,7 +29,8 @@ SDL_Window * window = nullptr;
  * push an event onto the event queue.  This event signifies
  * to call display() from the thread in which the OpenGL 
  * context was created.
- */
+ */	
+
 Uint32 display(Uint32 interval, void *param) {
 	SDL_Event event;
 	event.type = SDL_USEREVENT;
@@ -44,8 +45,6 @@ void display() {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-  // This O(n + n^2 + n) sequence of loops is written for clarity,
-  // not efficiency
   player->update();
   if (player->assetAlive()){
   	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.05)));
@@ -119,15 +118,9 @@ int main(int argc, char ** argv) {
     	gates.push_back(shared_ptr<Obstacle> (new Obstacle(-1.5, Oy, 15)));
     	gates.push_back(shared_ptr<Obstacle> (new Obstacle(1.5, Oy, 15)));
   	}	
-	//assets.push_back(shared_ptr<CubeAsset> (new CubeAsset(0, 0, 20)));
 	// Set the camera
-	//Camera::getInstance().lookAt(Point3(0.0, 0.0, -10.0), Point3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0));
 	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -2.0, 5.0)));
 		display();
-	//Camera::getInstance().setCamera(Matrix4::identity());
-
-	// Call the function "display" every delay milliseconds
-	//SDL_AddTimer(delay, display, NULL);
 
 	// Add the main event loop
 	SDL_Event event;
@@ -143,9 +136,10 @@ int main(int argc, char ** argv) {
 			  		display();
 			  		break;
 				case SDL_KEYUP:
-			  	// Camera::getInstance().setCamera(Matrix4::identity());
+					//set bool Kdown to false
 			  		break;
 				case SDL_KEYDOWN:
+					//set bool Kdown to true
 			  		Matrix4 camera = Camera::getInstance().getCameraM();
 			  switch(event.key.keysym.sym){
 			  	case SDLK_LEFT:
