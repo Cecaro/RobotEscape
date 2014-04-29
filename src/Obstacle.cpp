@@ -1,27 +1,25 @@
-#include "CubeAsset.h"
+#include "Obstacle.h"
 
-CubeAsset::CubeAsset(): GameAsset()
+Obstacle::Obstacle(): GameAsset()
 {
-  CubeAsset(0, 0, 0);
+  Obstacle(0, 0, 0);
 }
 
-CubeAsset::CubeAsset(float x, float y, float z) {
-  //this->li = nullptr;
-
-  // A default unit cube
+Obstacle::Obstacle(float x, float y, float z) {
+  // thinner cube for the gates
   num_vertices = 8;
   num_triangles = 12;
   g_vertex_buffer_data = new GLfloat[num_vertices * 3]{
 
 //x     y    z
--0.5, -0.5,  0.5, //F - 0
- 0.5, -0.5,  0.5, //F - 1
--0.5,  0.5,  0.5, //F - 2
- 0.5,  0.5,  0.5, //F - 3
--0.5, -0.5, -0.5, //B - 4
- 0.5, -0.5, -0.5, //B - 5
--0.5,  0.5, -0.5, //B - 6
- 0.5,  0.5, -0.5  //B - 7
+-0.5, -0.5,  0.125, //F - 0
+ 0.5, -0.5,  0.125, //F - 1
+-0.5,  0.5,  0.125, //F - 2
+ 0.5,  0.5,  0.125, //F - 3
+-0.5, -0.5, -0.125, //B - 4
+ 0.5, -0.5, -0.125, //B - 5
+-0.5,  0.5, -0.125, //B - 6
+ 0.5,  0.5, -0.125  //B - 7
 }; // three points per vertex
 
   g_element_buffer_data = new GLushort[num_triangles * 3]{
@@ -52,15 +50,15 @@ R2, F1, F0
   make_resources();
 }
 
-CubeAsset::~CubeAsset() {
+Obstacle::~Obstacle() {
   // TODO: do something nice and fun here.
 }
 
-void CubeAsset::update() {
+void Obstacle::update() {
 }
 
-void CubeAsset::draw() {
+void Obstacle::draw() {
   GameAsset::draw();
 }
 
-void CubeAsset::clean() { } 
+void Obstacle::clean() { } 

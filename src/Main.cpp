@@ -12,13 +12,14 @@
 #include "Camera.h"
 #include "CubeAsset.h"
 #include "Player.h"
+#include "Obstacle.h"
 
 using namespace std;
 
 #define RUN_GRAPHICS_DISPLAY 0x00;
 
 vector<shared_ptr<GameAsset> > assets;
-vector<shared_ptr<CubeAsset> >wall;
+vector<shared_ptr<Obstacle> >gates;
 shared_ptr<Player> player;
 
 SDL_Window * window = nullptr;
@@ -50,18 +51,16 @@ void display() {
   	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.05)));
   }
 
-  for(auto i : assets) {
-    for(auto j : assets) {
-      if((i != j) && i->collidesWith(*j)) {
+  for(auto i : gates) {
+      if(player->collidesWith(*i)) {
 	cout << "We have a collision"  << endl;
       }
-    }
   }
-
+	
   for(auto it : assets) {
     it->draw();
   }
-  for(auto it: wall){
+  for(auto it: gates){
   	it->draw();
   }
   player->draw();
@@ -111,15 +110,14 @@ int main(int argc, char ** argv) {
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
 	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
-	
 	//one obstacle creation
 	for (int Ox = -1.5; Ox <= 1.5; Ox++){
-    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(Ox, -1.5, 15)));
-    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(Ox, 1.5, 15)));
+    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, -1.5, 15)));
+    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, 1.5, 15)));
   	}
   	for (int Oy = -1.5; Oy <= 1.5; Oy++){
-    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(-1.5, Oy, 15)));
-    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(1.5, Oy, 15)));
+    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(-1.5, Oy, 15)));
+    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(1.5, Oy, 15)));
   	}	
 	//assets.push_back(shared_ptr<CubeAsset> (new CubeAsset(0, 0, 20)));
 	// Set the camera

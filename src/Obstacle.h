@@ -1,13 +1,13 @@
 #include "GameAsset.h"
 
-#ifndef CUBEASSET_H_
-#define CUBEASSET_H_
+#ifndef OBSTACLE_H_
+#define OBSTACLE_H_
 
-class CubeAsset : public GameAsset {
+class Obstacle : public GameAsset {
  public:
-  CubeAsset();
-  CubeAsset(float x, float y, float z);
-    ~CubeAsset();
+  Obstacle();
+  Obstacle(float x, float y, float z);
+    ~Obstacle();
 
   virtual void update();
   virtual void draw();
@@ -19,4 +19,4 @@ F0, F1, F2, F3, R1, R2, R3 , R4, };
  private:
 };
 
-#endif // CUBEASSET_H_
+#endif // OBSTACLE_H_
