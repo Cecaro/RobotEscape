@@ -29,7 +29,6 @@ public:
 	virtual ~GameAsset();
 
 	bool collidesWith(GameAsset & a);
-	bool isAlive = true;
 
 	virtual void draw();
 	virtual void update()=0;
@@ -64,6 +63,7 @@ protected:
 	void common_init(); // because we don't have delegating constructors yet (http://gcc.gnu.org/projects/cxx0x.html)
 	string v_shader;
 	string f_shader;
+	bool isAlive = true;
 };
 
 #endif /* GAMEASSET_H_ */
