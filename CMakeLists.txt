@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project("RobotEscape")
 
 #set the source files and path 
-set(SOURCES src/Main.cpp src/Camera.cpp src/Camera.h src/BoundingBox.cpp src/BoundingBox.h src/GameAsset.cpp src/GameAsset.h src/CubeAsset.h src/CubeAsset.cpp src/Player.h src/Player.cpp)
+set(SOURCES src/Main.cpp src/Camera.cpp src/Camera.h src/BoundingBox.cpp src/BoundingBox.h src/GameAsset.cpp src/GameAsset.h src/CubeAsset.h src/CubeAsset.cpp src/Player.h src/Player.cpp src/InputHandler.h src/InputHandler.cpp)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/Modules)
 
 
@@ -44,14 +44,8 @@ add_definitions(${SDL_DEFINITIONS} ${OpenGL_DEFINITIONS}) #${Vectormath_DEFINITI
 
 #Compiler flags depending on the OS 
 if (UNIX)
-  message(status " Setting GCC flags")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
-else()
-  message(status "Setting MSVC flags")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHc-")
 endif(UNIX)
-
-message(status " ** CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 #Define the c++ version used 
 add_definitions("-std=c++0x")

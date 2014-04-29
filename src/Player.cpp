@@ -1,13 +1,18 @@
 #include "Player.h"
 
-Player::Player(): GameAsset()
+Player::Player(): GameAsset 
+(
+  string("shaders/hello-gl.v.glsl"),
+  string("shaders/hello-gl.f.glsl"))
 {
   Player(0, 0, 0);
 }
 
-Player::Player(float x, float y, float z) {
-  //this->li = nullptr;
-
+Player::Player(float x, float y, float z): GameAsset 
+(
+  string("shaders/hello-gl.v.glsl"),
+  string("shaders/red-shader.f.glsl"))
+{
   // A default unit cube
   num_vertices = 8;
   num_triangles = 12;
@@ -73,7 +78,13 @@ void Player::MoveDown() {
     *MvD = Point3(MvD->getX(), (MvD->getY() - 0.5), MvD->getZ());
 }
 
+void Player::MoveForward() {
+  shared_ptr<Point3> MvF = this->bbox->getCentre();
+    *MvF = Point3(MvF->getX(), MvF->getY(), (MvF->getZ() + 0.05));
+}
+
 void Player::update() {
+  Player::MoveForward();
 }
 
 void Player::draw() {

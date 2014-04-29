@@ -29,9 +29,13 @@ public:
 	virtual ~GameAsset();
 
 	bool collidesWith(GameAsset & a);
+	bool isAlive = true;
 
 	virtual void draw();
 	virtual void update()=0;
+	virtual bool isDead() {isAlive = false;};
+	virtual bool assetAlive(){return isAlive;};
+
 
 protected:
 	/* functions */

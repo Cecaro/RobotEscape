@@ -12,13 +12,13 @@
 #include "Camera.h"
 #include "CubeAsset.h"
 #include "Player.h"
-#include "BoundingBox.h"
 
 using namespace std;
 
 #define RUN_GRAPHICS_DISPLAY 0x00;
 
 vector<shared_ptr<GameAsset> > assets;
+vector<shared_ptr<CubeAsset> >wall;
 shared_ptr<Player> player;
 
 SDL_Window * window = nullptr;
@@ -45,6 +45,10 @@ void display() {
 
   // This O(n + n^2 + n) sequence of loops is written for clarity,
   // not efficiency
+  player->update();
+  if (player->assetAlive()){
+  	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.05)));
+  }
 
   for(auto i : assets) {
     for(auto j : assets) {
@@ -56,6 +60,9 @@ void display() {
 
   for(auto it : assets) {
     it->draw();
+  }
+  for(auto it: wall){
+  	it->draw();
   }
   player->draw();
   
@@ -104,8 +111,17 @@ int main(int argc, char ** argv) {
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
 	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
-	assets.push_back(shared_ptr<CubeAsset> (new CubeAsset(0, 0, 10)));
-
+	
+	//one obstacle creation
+	for (int Ox = -1.5; Ox <= 1.5; Ox++){
+    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(Ox, -1.5, 15)));
+    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(Ox, 1.5, 15)));
+  	}
+  	for (int Oy = -1.5; Oy <= 1.5; Oy++){
+    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(-1.5, Oy, 15)));
+    	wall.push_back(shared_ptr<CubeAsset> (new CubeAsset(1.5, Oy, 15)));
+  	}	
+	//assets.push_back(shared_ptr<CubeAsset> (new CubeAsset(0, 0, 20)));
 	// Set the camera
 	//Camera::getInstance().lookAt(Point3(0.0, 0.0, -10.0), Point3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0));
 	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -2.0, 5.0)));
@@ -113,44 +129,53 @@ int main(int argc, char ** argv) {
 	//Camera::getInstance().setCamera(Matrix4::identity());
 
 	// Call the function "display" every delay milliseconds
-	SDL_AddTimer(delay, display, NULL);
+	//SDL_AddTimer(delay, display, NULL);
 
 	// Add the main event loop
 	SDL_Event event;
-	while (SDL_WaitEvent(&event)) {
-			switch (event.type) {
-			case SDL_QUIT:
-			  SDL_Quit();
-			  break;
-			case SDL_USEREVENT:
-			  display();
-			  break;
-			case SDL_KEYUP:
-			  // Camera::getInstance().setCamera(Matrix4::identity());
-			  break;
-			case SDL_KEYDOWN:
-			  Matrix4 camera = Camera::getInstance().getCameraM();
+	bool running = true;
+	while (running){
+		while (SDL_PollEvent(&event)) {
+				switch (event.type) {
+				case SDL_QUIT:
+					running = false;
+			  		SDL_Quit();
+			  		break;
+				case SDL_USEREVENT:
+			  		display();
+			  		break;
+				case SDL_KEYUP:
+			  	// Camera::getInstance().setCamera(Matrix4::identity());
+			  		break;
+				case SDL_KEYDOWN:
+			  		Matrix4 camera = Camera::getInstance().getCameraM();
 			  switch(event.key.keysym.sym){
-			  case SDLK_LEFT:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.5, 0.0, 0.0)) );
-			    player->MoveLeft();
-			    break;
-			  case SDLK_RIGHT:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(-0.5, 0.0, 0.0)) );
-			    player->MoveRight();
-			    break;
-			  case SDLK_UP:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, -0.5, 0.0)) );
-			    player->MoveUp();
-			    break;
-			  case SDLK_DOWN:
-			    Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.5, 0.0)) );
-			    player->MoveDown();
-			    break;
-			  default:
-			    break;
+			  	case SDLK_LEFT:
+			   		Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.5, 0.0, 0.0)) );
+			    	player->MoveLeft();
+			    	break;
+			  	case SDLK_RIGHT:
+			    	Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(-0.5, 0.0, 0.0)) );
+			    	player->MoveRight();
+			    	break;
+			  	case SDLK_UP:
+			   		Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, -0.5, 0.0)) );
+			    	player->MoveUp();
+			    	break;
+			  	case SDLK_DOWN:
+			    	Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.5, 0.0)) );
+			    	player->MoveDown();
+			    	break;
+			  	case SDLK_ESCAPE:
+			    	running = false;
+			    	break;
+			  	default:
+			    	break;
 			  }
 			  break;
 			}
-	}
+		}
+		SDL_Delay(10);
+		display();
+  	}
 }

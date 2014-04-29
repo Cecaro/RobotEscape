@@ -14,6 +14,7 @@ class Player : public GameAsset {
   void MoveRight();
   void MoveUp();
   void MoveDown();
+  void MoveForward();
 
   virtual void update();
   virtual void draw();
