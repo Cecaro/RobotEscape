@@ -48,9 +48,27 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
   player->update();
+		int xp_pos = int(player->bbox->getCentre()->getX());
+		int yp_pos = int(player->bbox->getCentre()->getY());
   if (player->assetAlive()){
   	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.05)));
   }
+
+//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
+	  for(int j = 0; j< 20; j ++){
+	  	int stX = xp_pos + j;
+	  	int stY = yp_pos + j;
+		for (int Ox = stX; Ox <= stX; Ox++){
+			cout<<stX<<endl;
+			cout<<stY<<endl;
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, stY, 15+j)));
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, stY, 15+j)));
+  		}
+  		for (int Oy = stY; Oy <= stY + 5; Oy++){
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(stX, Oy, 15+j)));
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(stX, Oy, 15+j)));
+  		}	
+  	  }
 
   for(auto i : gates) {
       if(player->collidesWith(*i)) {
@@ -116,22 +134,7 @@ int main(int argc, char ** argv) {
 	//load the objects
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
-	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
-	//one obstacle creation
-	while(player->assetAlive()){
-		int xp_pos = player->bbox->getCentre()->getX();
-		int yp_pos = player->bbox->getCentre()->getY();
-	  for(int j = 0; j< 20; j ++){
-		for (int Ox = -2.5; Ox <= 2.5; Ox++){
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, -2.5, 15)));
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, 2.5, 15)));
-  		}
-  		for (int Oy = -2.5; Oy <= 2.5; Oy++){
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(-2.5, Oy, 15)));
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(2.5, Oy, 15)));
-  		}	
-  	  }
-  	}
+  	
 	// Set the camera
 	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -1.0, 5.0)));
 		display();
