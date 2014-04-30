@@ -13,6 +13,7 @@
 #include "CubeAsset.h"
 #include "Player.h"
 #include "Obstacle.h"
+#include "InputHandler.h"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ vector<shared_ptr<Obstacle> >gates;
 shared_ptr<Player> player;
 
 SDL_Window * window = nullptr;
+
 
 /*
  * SDL timers run in separate threads.  In the timer thread
@@ -136,10 +138,10 @@ int main(int argc, char ** argv) {
 			  		display();
 			  		break;
 				case SDL_KEYUP:
-					//set bool Kdown to false
+					//onKUp();
 			  		break;
 				case SDL_KEYDOWN:
-					//set bool Kdown to true
+					//onKDown();
 			  		Matrix4 camera = Camera::getInstance().getCameraM();
 			  switch(event.key.keysym.sym){
 			  	case SDLK_LEFT:
