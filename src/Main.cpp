@@ -107,21 +107,33 @@ int main(int argc, char ** argv) {
 	  return 1;
 	}
 
+	//Depth Buffer Setup
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LEQUAL);
+	glDepthRange(0.0f, 1.0f);
+
 	//load the objects
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
 	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
 	//one obstacle creation
-	for (int Ox = -1.5; Ox <= 1.5; Ox++){
-    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, -1.5, 15)));
-    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, 1.5, 15)));
+	while(player->assetAlive()){
+		int xp_pos = player->bbox->getCentre()->getX();
+		int yp_pos = player->bbox->getCentre()->getY();
+	  for(int j = 0; j< 20; j ++){
+		for (int Ox = -2.5; Ox <= 2.5; Ox++){
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, -2.5, 15)));
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, 2.5, 15)));
+  		}
+  		for (int Oy = -2.5; Oy <= 2.5; Oy++){
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(-2.5, Oy, 15)));
+    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(2.5, Oy, 15)));
+  		}	
+  	  }
   	}
-  	for (int Oy = -1.5; Oy <= 1.5; Oy++){
-    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(-1.5, Oy, 15)));
-    	gates.push_back(shared_ptr<Obstacle> (new Obstacle(1.5, Oy, 15)));
-  	}	
 	// Set the camera
-	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -2.0, 5.0)));
+	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -1.0, 5.0)));
 		display();
 
 	// Add the main event loop

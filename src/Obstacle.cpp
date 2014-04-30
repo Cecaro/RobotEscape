@@ -45,7 +45,7 @@ R2, F1, F0
 }; // three vertices per triangle
 
   bbox.reset();
-  bbox = shared_ptr<BoundingBox>(new BoundingBox(Point3(x, y, z), 1.0, 1.0, 1.0));
+  bbox = shared_ptr<BoundingBox>(new BoundingBox(Point3(x, y, z), 1.0, 1.0, 0.25));
 
   make_resources();
 }

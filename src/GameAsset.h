@@ -35,6 +35,7 @@ public:
 	virtual bool isDead() {isAlive = false;};
 	virtual bool assetAlive(){return isAlive;};
 
+	shared_ptr<BoundingBox> bbox;
 
 protected:
 	/* functions */
@@ -57,7 +58,6 @@ protected:
 	int num_vertices;
 	int num_triangles;
 
-	shared_ptr<BoundingBox> bbox;
 
  private:
 	void common_init(); // because we don't have delegating constructors yet (http://gcc.gnu.org/projects/cxx0x.html)
