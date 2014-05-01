@@ -63,7 +63,7 @@ protected:
 	void common_init(); // because we don't have delegating constructors yet (http://gcc.gnu.org/projects/cxx0x.html)
 	string v_shader;
 	string f_shader;
-	bool isAlive = true;
+	bool isAlive;
 };
 
 #endif /* GAMEASSET_H_ */
