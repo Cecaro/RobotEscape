@@ -16,10 +16,10 @@ Floor::Floor(float x, float y, float z) :GameAsset(
   g_vertex_buffer_data = new GLfloat[num_vertices * 3]{
 
 //x     y    z
-  100, -30,  100, //F1
- -100, -30,  100, //F2
- -100, -30, -100, //F3
-  100, -30, -100  //F4
+  500, -30,  500, //F1
+ -500, -30,  500, //F2
+ -500, -30, -500, //F3
+  500, -30, -500  //F4
 }; 
 // three points per vertex
   g_element_buffer_data = new GLushort[num_triangles * 3]{

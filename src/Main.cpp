@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <memory>
+#include <time.h>
 
 #include "vectormath_cpp/vectormath_aos.h"
 #include "GameAsset.h"
@@ -14,7 +15,6 @@
 #include "Player.h"
 #include "Obstacle.h"
 #include "Obstacle2.h"
-#include "InputHandler.h"
 #include "Floor.h"
 
 using namespace std;
@@ -25,10 +25,14 @@ shared_ptr<Floor> ground;
 vector<shared_ptr<Obstacle> >hbars;
 vector<shared_ptr<Obstacle2> >vbars;
 shared_ptr<Player> player;
-
+int count = 0;
 SDL_Window * window = nullptr;
+int gate1 = 1;
+int gate2 = 1;
+int gate3 = 1;
+int gate4 = 1;
 
-
+clock_t t;
 /*
  * SDL timers run in separate threads.  In the timer thread
  * push an event onto the event queue.  This event signifies
@@ -49,12 +53,51 @@ Uint32 display(Uint32 interval, void *param) {
 void display() {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
   player->update();
-		int xp_pos = int(player->bbox->getCentre()->getX());
-		int yp_pos = int(player->bbox->getCentre()->getY());
+  count++;
+
+  t = clock();
+  double time = ((float)t/CLOCKS_PER_SEC) * 1.5 ;
+  cout<<"time is"<<time<<endl;
+
+  //cout << int(player->bbox->getCentre()->getZ()) << endl;
+ 	 if(player->assetAlive()){
+ 	 	  	int xp_pos  = int(player->bbox->getCentre()->getX());
+  			int yp_pos = int(player->bbox->getCentre()->getY());
+  			int random = rand() % 100;
+  		if(fmod(time, 0.3) < 0.04 && gate1 == 1){
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 15)));
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 15)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 15)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 15)));
+     		gate1 --;
+     	}
+		else if(fmod(time, 1.2) < 0.02 && gate2 == 1){
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 35)));
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 35)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 35)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 35)));  
+	      	gate2 --; 
+	    }
+	    else if(fmod(time, 4.3) <0.02 && gate3 == 1){
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 65)));
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 65)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 65)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 65)));
+	      	gate3 --; 	    	
+	    }
+	    else if(fmod(time, 7.0) <0.02 && gate4 == 1){
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 95)));
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 95)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 95)));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 95)));  
+	      	gate4 --; 	    	
+	    }
+	} 
+	
+
   if (player->assetAlive()){
-  	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.05)));
+  	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.07)));
   }
 
   for(auto i : hbars) {
@@ -68,7 +111,7 @@ void display() {
   		player->isDead();
   	}
   }
-	
+
   ground->draw();
   for(auto it: hbars){
   	it->draw();
@@ -125,23 +168,14 @@ int main(int argc, char ** argv) {
 	glDepthFunc(GL_LEQUAL);
 	glDepthRange(0.0f, 1.0f);
 
+
 	//load the objects
 	ground = shared_ptr<Floor> (new Floor(0,0,0));
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
 	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
-	  for(int j = 0; j< 4; j ++){
-		// for (int Ox = -2.5; Ox <= 2.5; Ox++){
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(0, -2.5, 15+(20*j))));
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(0, 2.5, 15+(20*j))));
-  // 		}
-  		// for (int Oy = -2.5; Oy <= 2.5; Oy++){
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(-2.5, 0, 15+(20*j))));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(2.5, 0, 15+(20*j))));
-  		// }	
-  	  }
+	//random positions for the gates, depending on the player's current position
 
-  	
 	// Set the camera
 	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -1.0, 5.0)));
 		display();
@@ -150,6 +184,10 @@ int main(int argc, char ** argv) {
 	SDL_Event event;
 	bool running = true;
 	while (running){
+		  if(player->isItAlive() == false){
+  			SDL_Quit();
+  			running = false;
+ 		  }
 		while (SDL_PollEvent(&event)) {
 				switch (event.type) {
 				case SDL_QUIT:

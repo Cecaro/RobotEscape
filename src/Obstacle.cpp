@@ -55,7 +55,6 @@ Obstacle::~Obstacle() {
 }
 
 void Obstacle::update() {
-  cout << "romain smells" << endl;
 }
 
 void Obstacle::draw() {

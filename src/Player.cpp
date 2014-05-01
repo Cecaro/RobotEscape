@@ -80,9 +80,11 @@ void Player::MoveDown() {
 
 void Player::MoveForward() {
   shared_ptr<Point3> MvF = this->bbox->getCentre();
-    *MvF = Point3(MvF->getX(), MvF->getY(), (MvF->getZ() + 0.05));
+    *MvF = Point3(MvF->getX(), MvF->getY(), (MvF->getZ() + 0.07));
 }
-
+bool Player::isItAlive(){
+  return isAlive;
+}
 void Player::update() {
   Player::MoveForward();
 }
