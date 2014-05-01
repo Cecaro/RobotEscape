@@ -13,14 +13,17 @@
 #include "CubeAsset.h"
 #include "Player.h"
 #include "Obstacle.h"
+#include "Obstacle2.h"
 #include "InputHandler.h"
+#include "Floor.h"
 
 using namespace std;
 
 #define RUN_GRAPHICS_DISPLAY 0x00;
 
-vector<shared_ptr<GameAsset> > assets;
-vector<shared_ptr<Obstacle> >gates;
+shared_ptr<Floor> ground;
+vector<shared_ptr<Obstacle> >hbars;
+vector<shared_ptr<Obstacle2> >vbars;
 shared_ptr<Player> player;
 
 SDL_Window * window = nullptr;
@@ -54,16 +57,23 @@ void display() {
   	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.05)));
   }
 
-  for(auto i : gates) {
+  for(auto i : hbars) {
       if(player->collidesWith(*i)) {
 	cout << "We have a collision"  << endl;
+		player->isDead();
       }
   }
-	
-  for(auto it : assets) {
-    it->draw();
+  for (auto i : vbars) {
+  	if (player->collidesWith(*i)) {
+  		player->isDead();
+  	}
   }
-  for(auto it: gates){
+	
+  ground->draw();
+  for(auto it: hbars){
+  	it->draw();
+  }
+  for (auto it:vbars){
   	it->draw();
   }
   player->draw();
@@ -116,18 +126,19 @@ int main(int argc, char ** argv) {
 	glDepthRange(0.0f, 1.0f);
 
 	//load the objects
+	ground = shared_ptr<Floor> (new Floor(0,0,0));
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
 	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
 	  for(int j = 0; j< 4; j ++){
-		for (int Ox = -2.5; Ox <= 2.5; Ox++){
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, -2.5, 15+(20*j))));
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(Ox, 2.5, 15+(20*j))));
-  		}
-  		for (int Oy = -2.5; Oy <= 2.5; Oy++){
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(-2.5, Oy, 15+(20*j))));
-    		gates.push_back(shared_ptr<Obstacle> (new Obstacle(2.5, Oy, 15+(20*j))));
-  		}	
+		// for (int Ox = -2.5; Ox <= 2.5; Ox++){
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(0, -2.5, 15+(20*j))));
+    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(0, 2.5, 15+(20*j))));
+  // 		}
+  		// for (int Oy = -2.5; Oy <= 2.5; Oy++){
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(-2.5, 0, 15+(20*j))));
+     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(2.5, 0, 15+(20*j))));
+  		// }	
   	  }
 
   	

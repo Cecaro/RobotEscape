@@ -14,7 +14,7 @@ void GameAsset::common_init() {
 GameAsset::GameAsset() {
   common_init();
   this->v_shader = "shaders/hello-gl.v.glsl";
-  this->f_shader = "shaders/hello-gl.f.glsl";
+  this->f_shader = "shaders/white.f.glsl";
 }
 
 GameAsset::GameAsset(const string & v_shader, const string & f_shader) : isAlive(true) {

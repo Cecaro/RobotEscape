@@ -1,25 +1,25 @@
-#include "Obstacle.h"
+#include "Obstacle2.h"
 
-Obstacle::Obstacle(): GameAsset()
+Obstacle2::Obstacle2(): GameAsset()
 {
-  Obstacle(0, 0, 0);
+  Obstacle2(0, 0, 0);
 }
 
-Obstacle::Obstacle(float x, float y, float z) {
+Obstacle2::Obstacle2(float x, float y, float z) {
   // thinner cube for the gates
   num_vertices = 8;
   num_triangles = 12;
   g_vertex_buffer_data = new GLfloat[num_vertices * 3]{
 
 //x     y    z
--2.5, -0.5,  0.125, //F - 0
- 2.5, -0.5,  0.125, //F - 1
--2.5,  0.5,  0.125, //F - 2
- 2.5,  0.5,  0.125, //F - 3
--2.5, -0.5, -0.125, //B - 4
- 2.5, -0.5, -0.125, //B - 5
--2.5,  0.5, -0.125, //B - 6
- 2.5,  0.5, -0.125  //B - 7
+-0.5, -2.5,  0.125, //F - 0
+ 0.5, -2.5,  0.125, //F - 1
+-0.5,  2.5,  0.125, //F - 2
+ 0.5,  2.5,  0.125, //F - 3
+-0.5, -2.5, -0.125, //B - 4
+ 0.5, -2.5, -0.125, //B - 5
+-0.5,  2.5, -0.125, //B - 6
+ 0.5,  2.5, -0.125  //B - 7
 }; // three points per vertex
 
   g_element_buffer_data = new GLushort[num_triangles * 3]{
@@ -50,16 +50,15 @@ R2, F1, F0
   make_resources();
 }
 
-Obstacle::~Obstacle() {
+Obstacle2::~Obstacle2() {
   // TODO: do something nice and fun here.
 }
 
-void Obstacle::update() {
-  cout << "romain smells" << endl;
+void Obstacle2::update() {
 }
 
-void Obstacle::draw() {
+void Obstacle2::draw() {
   GameAsset::draw();
 }
 
-void Obstacle::clean() { } 
+void Obstacle2::clean() { } 
