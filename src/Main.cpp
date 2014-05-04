@@ -22,10 +22,9 @@ using namespace std;
 #define RUN_GRAPHICS_DISPLAY 0x00;
 
 shared_ptr<Floor> ground;
-vector<shared_ptr<Obstacle> >hbars;
-vector<shared_ptr<Obstacle2> >vbars;
+vector<shared_ptr<Obstacle> >bRect;
+vector<shared_ptr<Obstacle2> >sRect;
 shared_ptr<Player> player;
-int count = 0;
 SDL_Window * window = nullptr;
 int gate1 = 1;
 int gate2 = 1;
@@ -54,69 +53,79 @@ void display() {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   player->update();
-  count++;
-
+  			//getting the player's coordinates for obstacle spawning
+  	 	  	int xp_pos  = int(player->bbox->getCentre()->getX());
+  			int yp_pos = int(player->bbox->getCentre()->getY());
+  			int zp_pos = int(player->bbox->getCentre()->getZ());
   t = clock();
   double time = ((float)t/CLOCKS_PER_SEC) * 1.5 ;
-  cout<<"time is"<<time<<endl;
+  int test = player->bbox->getCentre()->getZ();
 
-  //cout << int(player->bbox->getCentre()->getZ()) << endl;
+//Draw the obstacles only if the player is alive; they consitst of 4 blocks: two big rectangles at the top and bottom
+//and two thinner ones in the middle, with space in between them
  	 if(player->assetAlive()){
- 	 	  	int xp_pos  = int(player->bbox->getCentre()->getX());
-  			int yp_pos = int(player->bbox->getCentre()->getY());
-  			int random = rand() % 100;
+  			int random = rand() % 20;
   		if(fmod(time, 0.3) < 0.04 && gate1 == 1){
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 15)));
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 15)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 15)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 15)));
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random), 50)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random-26.25), (yp_pos+random+27.5), 50)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random+26.25), (yp_pos+random+27.5), 50)));
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random+55), 50)));
      		gate1 --;
      	}
-		else if(fmod(time, 1.2) < 0.02 && gate2 == 1){
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 35)));
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 35)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 35)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 35)));  
-	      	gate2 --; 
-	    }
-	    else if(fmod(time, 4.3) <0.02 && gate3 == 1){
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 65)));
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 65)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 65)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 65)));
-	      	gate3 --; 	    	
-	    }
-	    else if(fmod(time, 7.0) <0.02 && gate4 == 1){
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random,yp_pos+random-2, 95)));
-    		hbars.push_back(shared_ptr<Obstacle> (new Obstacle(xp_pos+random, yp_pos+random+2, 95)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos-2+random,yp_pos+random, 95)));
-     		vbars.push_back(shared_ptr<Obstacle2> (new Obstacle2(xp_pos+2+random, yp_pos+random, 95)));  
-	      	gate4 --; 	    	
-	    }
+		if(zp_pos >= 60 && gate2 == 1){
+			cout<<"test"<<endl;
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random), 90)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random-26.25), (yp_pos+random+27.5), 90)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random+26.25), (yp_pos+random+27.5), 90)));
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random+55), 90)));
+     		gate2 --;
+     	}
+     	if(zp_pos >= 110 && gate3 == 1){
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random), 130)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random-26.25), (yp_pos+random+27.5), 130)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random+26.25), (yp_pos+random+27.5), 130)));
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random+55), 130)));
+     		gate3 --;
+     	}
+     	if(zp_pos >= 160 && gate4 == 1){
+     		bRect.clear();
+     		sRect.clear();
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random), 175)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random-26.25), (yp_pos+random+27.5), 175)));
+  			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random+26.25), (yp_pos+random+27.5), 175)));
+  			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random+55), 175)));
+     		gate4 --;
+     	}
 	} 
-	
 
-  if (player->assetAlive()){
-  	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.07)));
+  if (player->assetAlive() && zp_pos<=240){
+  	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.1)));
+  }
+  if(zp_pos >= 300){
+  	player->isDead();
   }
 
-  for(auto i : hbars) {
+  for(auto i : bRect) {
+  	// if(player->bbox->getCentre()->getZ() == i->bbox->getCentre(à->getZ()){
+  	// 	if(player->bbox)
+  	// }
       if(player->collidesWith(*i)) {
 	cout << "We have a collision"  << endl;
 		player->isDead();
       }
+
   }
-  for (auto i : vbars) {
+  for (auto i : sRect) {
   	if (player->collidesWith(*i)) {
   		player->isDead();
   	}
   }
 
   ground->draw();
-  for(auto it: hbars){
+  for(auto it: bRect){
   	it->draw();
   }
-  for (auto it:vbars){
+  for (auto it:sRect){
   	it->draw();
   }
   player->draw();
@@ -177,7 +186,7 @@ int main(int argc, char ** argv) {
 	//random positions for the gates, depending on the player's current position
 
 	// Set the camera
-	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -1.0, 5.0)));
+	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -1.0, 10.0)));
 		display();
 
 	// Add the main event loop
@@ -205,24 +214,25 @@ int main(int argc, char ** argv) {
 			  		Matrix4 camera = Camera::getInstance().getCameraM();
 			  switch(event.key.keysym.sym){
 			  	case SDLK_LEFT:
-			   		Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.5, 0.0, 0.0)) );
+			   		Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(1.0, 0.0, 0.0)) );
 			    	player->MoveLeft();
 			    	break;
 			  	case SDLK_RIGHT:
-			    	Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(-0.5, 0.0, 0.0)) );
+			    	Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(-1.0, 0.0, 0.0)) );
 			    	player->MoveRight();
 			    	break;
 			  	case SDLK_UP:
-			   		Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, -0.5, 0.0)) );
+			   		Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, -1.0, 0.0)) );
 			    	player->MoveUp();
 			    	break;
 			  	case SDLK_DOWN:
-			    	Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 0.5, 0.0)) );
+			    	Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 1.0, 0.0)) );
 			    	player->MoveDown();
 			    	break;
 			  	case SDLK_ESCAPE:
 			    	running = false;
 			    	break;
+
 			  	default:
 			    	break;
 			  }

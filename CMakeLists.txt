@@ -46,6 +46,8 @@ add_definitions(${SDL_DEFINITIONS} ${OpenGL_DEFINITIONS}) #${Vectormath_DEFINITI
 if (UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
 endif(UNIX)
+#else if(WIN32)
+#	set(CMAKE_CXX_FLAGS )
 
 #Define the c++ version used 
 add_definitions("-std=c++0x")

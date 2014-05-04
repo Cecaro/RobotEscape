@@ -15,6 +15,7 @@ class Player : public GameAsset {
   void MoveUp();
   void MoveDown();
   void MoveForward();
+  void PlayerBoost();
   bool isItAlive();
 
   virtual void update();

@@ -63,24 +63,24 @@ Player::~Player() {
 //Player Movement
 void Player::MoveLeft() {
     shared_ptr<Point3> MvL = this->bbox->getCentre();
-    *MvL = Point3((MvL->getX() - 0.5), MvL->getY(), MvL->getZ());
+    *MvL = Point3((MvL->getX() - 1.0), MvL->getY(), MvL->getZ());
 }
 void Player::MoveRight() {
   shared_ptr<Point3> MvR = this->bbox->getCentre();
-    *MvR = Point3((MvR->getX() + 0.5), MvR->getY(), MvR->getZ());
+    *MvR = Point3((MvR->getX() + 1.0), MvR->getY(), MvR->getZ());
 }  
 void Player::MoveUp() {
   shared_ptr<Point3> MvU = this->bbox->getCentre();
-    *MvU = Point3( MvU->getX(), (MvU-> getY() + 0.5), MvU->getZ());
+    *MvU = Point3( MvU->getX(), (MvU-> getY() + 1.0), MvU->getZ());
 }
 void Player::MoveDown() {
   shared_ptr<Point3> MvD = this->bbox->getCentre();
-    *MvD = Point3(MvD->getX(), (MvD->getY() - 0.5), MvD->getZ());
+    *MvD = Point3(MvD->getX(), (MvD->getY() - 1.0), MvD->getZ());
 }
 
 void Player::MoveForward() {
   shared_ptr<Point3> MvF = this->bbox->getCentre();
-    *MvF = Point3(MvF->getX(), MvF->getY(), (MvF->getZ() + 0.07));
+    *MvF = Point3(MvF->getX(), MvF->getY(), (MvF->getZ() + 0.1));
 }
 bool Player::isItAlive(){
   return isAlive;

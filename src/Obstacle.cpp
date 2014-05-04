@@ -12,14 +12,14 @@ Obstacle::Obstacle(float x, float y, float z) {
   g_vertex_buffer_data = new GLfloat[num_vertices * 3]{
 
 //x     y    z
--2.5, -0.5,  0.125, //F - 0
- 2.5, -0.5,  0.125, //F - 1
--2.5,  0.5,  0.125, //F - 2
- 2.5,  0.5,  0.125, //F - 3
--2.5, -0.5, -0.125, //B - 4
- 2.5, -0.5, -0.125, //B - 5
--2.5,  0.5, -0.125, //B - 6
- 2.5,  0.5, -0.125  //B - 7
+-50.0, -25.0,  0.125, //F - 0
+ 50.0, -25.0,  0.125, //F - 1
+-50.0,  25.0,  0.125, //F - 2
+ 50.0,  25.0,  0.125, //F - 3
+-50.0, -25.0, -0.125, //B - 4
+ 50.0, -25.0, -0.125, //B - 5
+-50.0,  25.0, -0.125, //B - 6
+ 50.0,  25.0, -0.125  //B - 7
 }; // three points per vertex
 
   g_element_buffer_data = new GLushort[num_triangles * 3]{
@@ -45,7 +45,7 @@ R2, F1, F0
 }; // three vertices per triangle
 
   bbox.reset();
-  bbox = shared_ptr<BoundingBox>(new BoundingBox(Point3(x, y, z), 1.0, 1.0, 0.25));
+  bbox = shared_ptr<BoundingBox>(new BoundingBox(Point3(x, y, z), 100.0, 50.0, 0.25));
 
   make_resources();
 }
