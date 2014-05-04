@@ -24,7 +24,6 @@ GameAsset::GameAsset(const string & v_shader, const string & f_shader) : isAlive
 }
 
 GameAsset::~GameAsset() {
-	// TODO Auto-generated destructor stub
 }
 
 bool GameAsset::collidesWith(GameAsset & a ) {
@@ -37,8 +36,6 @@ void GameAsset::draw() {
   
   Vector4 tx = Camera::getInstance().getCameraM() * *(bbox->getCentre());
   float tx_unpacked[] = {tx.getX(), tx.getY(), tx.getZ(), tx.getW()};
-
-  //  std::cout << "tx.x " << tx.getX() << "\ttx.y " << tx.getY() << "\t tx.z " << tx.getZ() << std::endl;
   
   glUniform4fv(tx_uniform, 1, tx_unpacked);
 

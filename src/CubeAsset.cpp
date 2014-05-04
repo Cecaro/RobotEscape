@@ -53,7 +53,6 @@ R2, F1, F0
 }
 
 CubeAsset::~CubeAsset() {
-  // TODO: do something nice and fun here.
 }
 
 void CubeAsset::update() {

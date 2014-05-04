@@ -17,7 +17,7 @@ Player::Player(float x, float y, float z): GameAsset
   num_vertices = 8;
   num_triangles = 12;
   g_vertex_buffer_data = new GLfloat[num_vertices * 3]{
-
+ // three points per vertex
 //x     y    z
 -0.5, -0.5, 0.5,  //F - 0
  0.5, -0.5, 0.5,  //F - 1
@@ -27,8 +27,8 @@ Player::Player(float x, float y, float z): GameAsset
  0.5, -0.5, -0.5, //B - 5
 -0.5, 0.5, -0.5,  //B - 6
  0.5, 0.5, -0.5   //B - 7
-}; // three points per vertex
-
+};
+ // three vertices per triangle
   g_element_buffer_data = new GLushort[num_triangles * 3]{
 
 F0, F1, F2, //front
@@ -49,7 +49,7 @@ F3, R4, R3,
 R1, R2, F0, //bottom
 R2, F1, F0
 
-}; // three vertices per triangle
+};
 
   bbox.reset();
   bbox = shared_ptr<BoundingBox>(new BoundingBox(Point3(x, y, z), 1.0, 1.0, 1.0));

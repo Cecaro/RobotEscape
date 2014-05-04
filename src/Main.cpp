@@ -59,7 +59,6 @@ void display() {
   			int zp_pos = int(player->bbox->getCentre()->getZ());
   t = clock();
   double time = ((float)t/CLOCKS_PER_SEC) * 1.5 ;
-  int test = player->bbox->getCentre()->getZ();
 
 //Draw the obstacles only if the player is alive; they consitst of 4 blocks: two big rectangles at the top and bottom
 //and two thinner ones in the middle, with space in between them
@@ -73,7 +72,6 @@ void display() {
      		gate1 --;
      	}
 		if(zp_pos >= 60 && gate2 == 1){
-			cout<<"test"<<endl;
   			bRect.push_back(shared_ptr<Obstacle>(new Obstacle((xp_pos+random), (yp_pos+random), 90)));
   			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random-26.25), (yp_pos+random+27.5), 90)));
   			sRect.push_back(shared_ptr<Obstacle2>(new Obstacle2((xp_pos+random+26.25), (yp_pos+random+27.5), 90)));
@@ -98,29 +96,31 @@ void display() {
      	}
 	} 
 
+	//Making the camera follow the player's movement. Stopping it after going through all the obstacles to show that
+	//the game has been won
   if (player->assetAlive() && zp_pos<=240){
   	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, 0.0, -0.1)));
   }
+  	//end the game, win situation
   if(zp_pos >= 300){
   	player->isDead();
+  	cout<<"Congratulations, you have escaped the prison! However, your adventure is only starting!"<<endl;
   }
 
   for(auto i : bRect) {
-  	// if(player->bbox->getCentre()->getZ() == i->bbox->getCentre(à->getZ()){
-  	// 	if(player->bbox)
-  	// }
       if(player->collidesWith(*i)) {
-	cout << "We have a collision"  << endl;
 		player->isDead();
+		cout<<"Unfortunately, a forcefield nullifier is not equiped! Trying to go through one means death for you."<<endl;
       }
 
   }
   for (auto i : sRect) {
   	if (player->collidesWith(*i)) {
   		player->isDead();
+  		cout<<"Unfortunately, a forcefield nullifier is not equiped! Trying to go through one means death for you."<<endl;
   	}
   }
-
+  
   ground->draw();
   for(auto it: bRect){
   	it->draw();
@@ -171,7 +171,7 @@ int main(int argc, char ** argv) {
 	  return 1;
 	}
 
-	//Depth Buffer Setup
+	//Depth Buffer Setup - necessity for 3D collision
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_LEQUAL);
@@ -182,8 +182,6 @@ int main(int argc, char ** argv) {
 	ground = shared_ptr<Floor> (new Floor(0,0,0));
 	//Loading the player
 	player = shared_ptr<Player> (new Player(0, 0, 0));
-	//Loading the obstacles - formed of 8 cubes put together to have a hole in the middle which the player can go through
-	//random positions for the gates, depending on the player's current position
 
 	// Set the camera
 	Camera::getInstance().setCamera(Camera::getInstance().getCameraM() * Matrix4::translation(Vector3(0.0, -1.0, 10.0)));
@@ -226,8 +224,11 @@ int main(int argc, char ** argv) {
 			    	player->MoveUp();
 			    	break;
 			  	case SDLK_DOWN:
+			  	//The condition prevents the player from going through the ground
+			  	if(player->bbox->getCentre()->getY() >= -28){
 			    	Camera::getInstance().setCamera(camera * Matrix4::translation(Vector3(0.0, 1.0, 0.0)) );
 			    	player->MoveDown();
+			    }
 			    	break;
 			  	case SDLK_ESCAPE:
 			    	running = false;
