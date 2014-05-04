@@ -111,6 +111,7 @@ void display() {
       if(player->collidesWith(*i)) {
 		player->isDead();
 		cout<<"Unfortunately, a forcefield nullifier is not equiped! Trying to go through one means death for you."<<endl;
+		cout<"Please come back after training fast reflexes."<<endl;
       }
 
   }
@@ -118,9 +119,10 @@ void display() {
   	if (player->collidesWith(*i)) {
   		player->isDead();
   		cout<<"Unfortunately, a forcefield nullifier is not equiped! Trying to go through one means death for you."<<endl;
+  		cout<"Please come back after training fast reflexes."<<endl;
   	}
   }
-  
+
   ground->draw();
   for(auto it: bRect){
   	it->draw();
